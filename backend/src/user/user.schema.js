@@ -3,9 +3,12 @@ import mongoose from "mongoose";
 // Declare the Schema of the Mongo model
 var userSchema = new mongoose.Schema(
   {
-    name: String,
-    email: String,
-    age: Number,
+    userId: String,
+    userName: String,
+    userBirth: Date,
+    userEmail: String,
+    userPhone: String,
+    userPass: String,
   },
   {
     timestamps: true,
@@ -13,4 +16,4 @@ var userSchema = new mongoose.Schema(
 );
 
 //Export the model
-export default mongoose.model("users", userSchema);
+export default mongoose.model("userTest", userSchema);
