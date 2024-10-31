@@ -112,4 +112,8 @@ export class UserService {
   static storeVerificationCode = async (userId, code) => {
     return await userModel.findByIdAndUpdate(userId, { verificationCode: code }, { new: true });
   };
+  static deleteUser = async (email) => {
+    const deleteduser = await userModel.findOneAndDelete({ email });
+    return deleteduser;
+  };
 }

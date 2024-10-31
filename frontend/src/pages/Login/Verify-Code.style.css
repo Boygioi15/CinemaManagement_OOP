@@ -1,0 +1,8 @@
+.middle-verify {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to bottom, #0b0d1c, #1a1a2e);
+  color: #fff;
+  background: url("../../../../Images/Cover.png") no-repeat center center/cover;
+  position: relative;
+}
