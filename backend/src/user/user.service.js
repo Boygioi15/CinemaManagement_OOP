@@ -7,6 +7,10 @@ const client = twilio(accountSid, authToken);
 
 
 export class UserService {
+  static findUserById = async (userId) => {
+    return await userModel.findById(userId);
+  };
+  
   static findUserByEmail = async (userEmail) => {
     return await userModel.findOne({ userEmail });
   };
@@ -107,9 +111,5 @@ export class UserService {
 
   static storeVerificationCode = async (userId, code) => {
     return await userModel.findByIdAndUpdate(userId, { verificationCode: code }, { new: true });
-  };
-
-  static findUserById = async (userId) => {
-    return await userModel.findById(userId);
   };
 }
