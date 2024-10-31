@@ -1,19 +1,35 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
-// Declare the Schema of the Mongo model
-var userSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     userId: String,
     userName: String,
+    userGender: Boolean,
     userBirth: Date,
-    userEmail: String,
-    userPhone: String,
+    userEmail: { type: String, unique: true },
+    userPhone: { type: String, unique: true },
     userPass: String,
+    userActive: { type: Boolean, default: true },
+    otp: { type: String },
+    otpExpiration: { type: Date },
+    verificationCode: { type: String },
   },
   {
     timestamps: true,
   }
 );
 
-//Export the model
-export default mongoose.model("userTest", userSchema);
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("userPass")) return next();
+  const saltRounds = 10;
+  this.userPass = await bcrypt.hash(this.userPass, saltRounds);
+  next();
+});
+
+userSchema.methods.comparePassword = async function (candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.userPass);
+};
+
+const userModel = mongoose.model("userTest", userSchema);
+export default userModel;
