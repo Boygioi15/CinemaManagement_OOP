@@ -22,6 +22,34 @@ class UserController {
       success: true,
     });
   };
+
+  deleteUser = async (req, res, next) => {
+    console.log(req.body);
+    if (!req?.body?.email) {
+      res.status(400).json({
+        msg: "Email is required for deletion",
+        success: false,
+      });
+      return;
+    }
+
+    const userToDelete = await UserService.findUserByEmail(req.body.email);
+
+    if (!userToDelete) {
+      res.status(404).json({
+        msg: "User not found",
+        success: false,
+      });
+      return;
+    }
+
+    await UserService.deleteUser(req.body.email);
+
+    res.status(200).json({
+      msg: "User deleted successfully",
+      success: true,
+    });
+  };
 }
 
 export default new UserController();

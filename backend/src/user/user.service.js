@@ -10,4 +10,8 @@ export class UserService {
     const createdUser = await userModel.findOne({ email });
     return createdUser;
   };
+  static deleteUser = async (email) => {
+    const deleteduser = await userModel.findOneAndDelete({ email });
+    return deleteduser;
+  };
 }
