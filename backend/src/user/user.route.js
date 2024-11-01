@@ -13,6 +13,4 @@ router.post("/request-password-reset", userController.requestPasswordReset);
 router.post("/verify-code", userController.verifyCode);
 router.post("/reset-password", userController.resetPassword);
 
-
-
 export default router;
