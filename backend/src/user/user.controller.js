@@ -42,7 +42,7 @@ class UserController {
           success: false,
         });
       }
-      u
+
       const createdUser = await UserService.createUser(req.body);
       if (createdUser?.error) {
         return res.status(400).json({
@@ -160,7 +160,6 @@ class UserController {
   loginUser = async (req, res, next) => {
     try {
       const { identifier, password, otp } = req.body;
-
       const user = await UserService.findUserByEmail(identifier) || await UserService.findUserByPhone(identifier);
       if (!user) {
         return res.status(404).json({ msg: "User not found", success: false });
@@ -169,7 +168,7 @@ class UserController {
       if (password) {
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
-          return res.status(401).json({ msg: "Invalid credentials", success: false });
+          return res.status(401).json({ msg: "Incorrect password!", success: false });
         }
         return res.status(200).json({ msg: "Login successful", success: true, user });
       }
@@ -189,15 +188,32 @@ class UserController {
   };
 
   requestPasswordReset = async (req, res, next) => {
-    const { userEmail, userPhone } = req.body;
     try {
-      const user = await UserService.findUserByEmail(userEmail) || await UserService.findUserByPhone(userPhone);
+      const { identifier } = req.body;  
+
+      const isEmail = identifier.includes('@');
+      if (!isEmail) {  
+        return res.status(501).json({ msg: "Tính năng gửi OTP qua SMS đang phát triển", success: false });
+      }
+
+      const user = await UserService.findUserByEmail(identifier) || await UserService.findUserByPhone(identifier);
       if (!user) {
         return res.status(404).json({ msg: "User not found", success: false });
       }
 
-      const verificationCode = Math.random().toString(36).substring(2, 8);
-      await UserService.sendVerificationCode(userEmail || userPhone, verificationCode);
+      const generateVerificationCode = () => {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let code = '';
+        for (let i = 0; i < 6; i++) {
+          const randomIndex = Math.floor(Math.random() * characters.length);
+          code += characters[randomIndex];
+        }
+        return code;
+      };
+      
+      const verificationCode = generateVerificationCode();
+      
+      await UserService.sendVerificationCode(identifier, verificationCode);
       await UserService.storeVerificationCode(user._id, verificationCode);
 
       return res.status(200).json({ msg: "Verification code sent successfully", success: true });
@@ -206,16 +222,39 @@ class UserController {
     }
   };
 
-  verifyCodeAndResetPassword = async (req, res, next) => {
-    const { userId, verificationCode, newPassword } = req.body;
+  verifyCode = async (req, res, next) => {
     try {
-      const user = await UserService.findUserById(userId);
+      const { identifier, verificationCode } = req.body;
+
+      const user = await UserService.findUserByEmail(identifier) || await UserService.findUserByPhone(identifier);
       if (!user) {
         return res.status(404).json({ msg: "User not found", success: false });
       }
 
       if (user.verificationCode !== verificationCode) {
         return res.status(401).json({ msg: "Invalid verification code", success: false });
+      }
+
+      user.isVerified = true;
+      await user.save();
+
+      return res.status(200).json({ msg: "Verification successful", success: true });
+    } catch (error) {
+      res.status(500).json({ msg: "An error occurred", success: false });
+    }
+  };
+
+  resetPassword = async (req, res, next) => {
+    try {
+      const { identifier, newPassword } = req.body;
+
+      const user = await UserService.findUserByEmail(identifier) || await UserService.findUserByPhone(identifier);
+      if (!user) {
+        return res.status(404).json({ msg: "User not found", success: false });
+      }
+
+      if (!user.isVerified) {
+        return res.status(401).json({ msg: "User not verified", success: false });
       }
 
       const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})/;
@@ -226,7 +265,9 @@ class UserController {
         });
       }
 
-      user.userPass = newPassword; 
+      user.userPass = newPassword;
+      user.isVerified = false;
+      user.verificationCode = undefined;
       await user.save();
 
       return res.status(200).json({ msg: "Password reset successfully", success: true });
@@ -234,6 +275,7 @@ class UserController {
       res.status(500).json({ msg: "An error occurred", success: false });
     }
   };
+
 
   deleteUser = async (req, res, next) => {
     console.log(req.body);

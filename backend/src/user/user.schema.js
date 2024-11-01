@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema(
     userPass: String,
     userActive: { type: Boolean, default: true },
     otp: { type: String },
+    isVerified: Boolean,
     otpExpiration: { type: Date },
     verificationCode: { type: String },
   },
@@ -31,5 +32,5 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.userPass);
 };
 
-const userModel = mongoose.model("userTest", userSchema);
+const userModel = mongoose.model("usertest", userSchema);
 export default userModel;

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 import "./Confirm-Password.style.css";
 
 function ConfirmPasswordPage() {
@@ -7,39 +8,51 @@ function ConfirmPasswordPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleSubmit = (e) => {
+  const username = location.state?.username || "";
+
+  const handleClick = async (e) => {
     e.preventDefault();
-
     if (password !== confirmPassword) {
       setError("Mật khẩu không khớp");
     } else if (password.length < 8) {
       setError("Mật khẩu phải có ít nhất 8 ký tự");
     } else {
-      setError("");
-      // Navigate to the success page after password is successfully reset
-      navigate("/password-reset-success");
+      try {
+        const response = await axios.post("http://localhost:5000/api/user/reset-password", {
+          identifier: username,
+          newPassword: confirmPassword,
+        });
+        if (response.status === 200) {
+          alert("Đặt lại mật khẩu thành công!");
+          navigate("/");
+        }
+      } catch (error) {
+        alert("Error: " + error.response?.data?.msg);
+      }
     }
   };
+  
   return (
     <div className="middle-confirm">
       <div className="ConfirmPasswordPageRoot" style={{ behavior: "smooth" }}>
-        <div class="header">
-          <div class="logo-container">
+        <div className="header">
+          <div className="logo-container">
             <img alt="Cinestar Logo" height="40" src="/Images/logo.svg" />
             <span className="logo-text">FilmNest</span>
           </div>
-          <div class="nav-links">
+          <div className="nav-links">
             <a href="#">Chọn rạp</a>
             <a href="#">Lịch chiếu</a>
-            <a class="btn btn-yellow" href="#">
+            <a className="btn btn-yellow" href="#">
               Đặt vé ngay
             </a>
-            <a class="btn btn-purple" href="#">
+            <a className="btn btn-purple" href="#">
               Đặt bắp nước
             </a>
           </div>
-          <div class="search-bar">
+          <div className="search-bar">
             <input placeholder="Tìm phim, rạp" type="text" />
             <button>
               <img
@@ -50,30 +63,30 @@ function ConfirmPasswordPage() {
               />
             </button>
           </div>
-          <div class="additional-links">
+          <div className="additional-links">
             <a onClick={() => navigate("/")}>
-              <i class="fas fa-user"></i>
+              <i className="fas fa-user"></i>
               Đăng nhập
             </a>
             <a href="#">
-              <i class="fas fa-globe"></i>
+              <i className="fas fa-globe"></i>
               VN
             </a>
           </div>
         </div>
-        <div class="sub-header">
-          <div class="additional-links">
+        <div className="sub-header">
+          <div className="additional-links">
             <a href="#">Khuyến mãi</a>
             <a href="#">Thuê sự kiện</a>
             <a href="#">Tất cả giải trí</a>
             <a href="#">Giới thiệu</a>
           </div>
         </div>
-        <div class="forgot-container">
-          <div class="forgot-box">
+        <div className="forgot-container">
+          <div className="forgot-box">
             <h1>ĐẶT LẠI MẬT KHẨU MỚI</h1>
             <p>Vui lòng nhập mật khẩu mới</p>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleClick}>
               {error && <p style={{ color: "red" }}>{error}</p>}
               <input
                 type="password"
@@ -92,7 +105,7 @@ function ConfirmPasswordPage() {
                 required
               />
               <br />
-              <div class="verify">
+              <div className="verify">
                 <button type="submit">XÁC NHẬN MẬT KHẨU</button>
               </div>
             </form>
