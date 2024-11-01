@@ -10,7 +10,9 @@ router.get("/get-all-users", userController.getAllUsers);
 router.post("/request-otp", userController.requestOTP);
 router.post("/login", userController.loginUser);
 router.post("/request-password-reset", userController.requestPasswordReset);
-router.post("/verify-code-and-reset-password", userController.verifyCodeAndResetPassword);
+router.post("/verify-code", userController.verifyCode);
+router.post("/reset-password", userController.resetPassword);
+
 
 
 export default router;
