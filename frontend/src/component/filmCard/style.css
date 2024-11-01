@@ -1,0 +1,60 @@
+.film-card {
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    width: 250px;
+    margin: 20px;
+}
+
+.film-card:hover {
+    transform: scale(1.05); /* Hiệu ứng phóng to nhẹ khi hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Tăng độ bóng */
+}
+
+
+.film-card-image {
+    width: 100%;
+    height: 350px; /* Tăng chiều cao để hình lớn hơn */
+    object-fit: cover;
+}
+
+.film-card-content {
+    padding: 15px;
+}
+
+.film-card-title {
+    font-size: 20px;
+    margin: 0 0 10px;
+}
+
+.film-card-description {
+    font-size: 14px;
+    color: #555;
+}
+
+/* Lớp phủ hiển thị khi hover */
+.film-card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Lớp phủ tối màu */
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    text-align: center;
+}
+
+.film-card:hover .film-card-overlay {
+    opacity: 1;
+    transform: translateY(-10px);
+}

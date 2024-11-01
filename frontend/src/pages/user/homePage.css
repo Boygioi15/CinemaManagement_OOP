@@ -1,0 +1,49 @@
+.container{
+    margin-left: 80px;
+    margin-right: 80px;
+}
+
+.child-container {
+    border: 0px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+}
+
+/* Định nghĩa màu nền cho từng container */
+.banner-container {
+    height: 300px;
+    background-color: lightblue;
+}
+
+.quickBook-container {
+    height: 300px;
+    background-color: lightgreen;
+}
+
+.movie-showing-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 cột với chiều rộng bằng nhau */
+    gap: 20px; /* Khoảng cách giữa các cột */
+}
+
+.upcoming-movie-container {
+    height: 300px;
+    background-color: lightgoldenrodyellow;
+}
+
+.promotion-container {
+    height: 300px;
+    background-color: lightpink;
+}
+
+.membership-container {
+    height: 300px;
+    background-color: lightgray;
+}
+
+.contact-container {
+    height: 300px;
+    background-color: lightcyan;
+}

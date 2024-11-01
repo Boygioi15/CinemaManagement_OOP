@@ -1,8 +1,12 @@
-import CreateUserPage from "./pages/user/user.create-user";
+import RouterCustom from "./RouterMaster";
+import { BrowserRouter } from "react-router-dom";
+
 function App() {
   return (
     <div className="App">
-      <CreateUserPage />
+      <BrowserRouter>
+        <RouterCustom />
+      </BrowserRouter>
     </div>
   );
 }
