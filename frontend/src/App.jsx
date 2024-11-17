@@ -4,13 +4,15 @@ import RegisterPage from "./pages/Login/Register-Page";
 import ForgotPasswordPage from "./pages/Login/Forgot-password-Page";
 import VerifyCodePage from "./pages/Login/Verify-Code";
 import ConfirmPasswordPage from "./pages/Login/Confirm-Passoword";
+import HomePage from "./pages/Login/Home";
 import Test from "./pages/Login/Test";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/verify-code" element={<VerifyCodePage />} />

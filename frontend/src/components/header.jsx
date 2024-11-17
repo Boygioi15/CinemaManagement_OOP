@@ -1,6 +1,6 @@
-import { useNavigate } from "react-router-dom";
+import React from "react";
 
-function Test() {
+const Header = () => {
   return (
     <header>
       <div className="header bg-blue-900 p-2.5 flex items-center justify-between relative z-10">
@@ -40,7 +40,7 @@ function Test() {
             <input
               placeholder="Tìm phim"
               type="text"
-              className="flex-grow outline-none text-xs text-gray-800 placeholder-gray-400 px-2 mt-5"
+              className="flex-grow outline-none text-xs text-gray-800 placeholder-gray-400 px-2"
             />
             {/* Button với ảnh kính lúp */}
             <button className="bg-transparent border-none flex items-center justify-center p-1">
@@ -51,7 +51,7 @@ function Test() {
           {/* Additional Links */}
           <div className="additional-links flex items-center space-x-6">
             <a
-              href="#"
+              href="/login"
               className="text-white text-sm flex items-center space-x-1 hover:underline"
             >
               <img
@@ -73,6 +73,6 @@ function Test() {
       </div>
     </header>
   );
-}
+};
 
-export default Test;
+export default Header;
